@@ -4,6 +4,8 @@ from .serializers import UserDataSerializer, UserScoringSerializer, generate_ran
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin, \
     DestroyModelMixin, CreateModelMixin
+from rest_framework.decorators import api_view
+from rest_framework import status
 import logging
 
 logger = logging.getLogger(__name__)
@@ -51,10 +53,12 @@ class UserScoringDetail(GenericAPIView, RetrieveModelMixin):
             return Response({'error': str(e)}, status=500)
 
 
-def handle_user_data(users_data):
-    
+@api_view(['POST', 'PATCH'])
+def handle_user_data(request):
+    users_data = request.data
+
     if not isinstance(users_data, list):
-        return {"error": "Request data must be a list of users."}
+        return Response({"error": "Request data must be a list of users."}, status=status.HTTP_400_BAD_REQUEST)
 
     user_responses = []
 
@@ -63,8 +67,7 @@ def handle_user_data(users_data):
         user_response = process_single_user_data(user_data, user_id)
         user_responses.append(user_response)
 
-    return user_responses
-
+    return Response(user_responses, status=status.HTTP_200_OK)
 
 def process_single_user_data(user_data, user_id=None):
     try:
