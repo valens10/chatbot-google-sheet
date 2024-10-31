@@ -2,6 +2,7 @@ import os
 import gspread
 from typing import List, Optional, Dict
 import logging
+import requests
 from gspread.exceptions import SpreadsheetNotFound
 from django.conf import settings
 
@@ -54,26 +55,25 @@ def fetch_data_from_google_sheet(doc_name: str, sheet_name: Optional[str] = None
     # Return an empty list if an error occurs
     return []
 
-def send_user_data_to_api(data: List[Dict]) -> bool:
-    """
-    Process a list of user data entries using the handle_user_data function.
-    Returns True if processing was successful, otherwise False.
-    """
-    try:
-        from chatbot.views import handle_user_data #Standalone
-        # Directly call handle_user_data and pass [Simulation of the request Mock API Request]
-        response_data = handle_user_data(data)
 
-        if isinstance(response_data, list):
+def send_user_data_to_api(data: List[Dict]) -> bool:
+    try:
+        # Setting up headers
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache',
+        }
+        api_url = BASE_URL + '/api/chatbot/user_data'  #mock API URL
+        response = requests.post(api_url, json=data, headers=headers)
+
+        if response.status_code == 200:
             logger.info('Data processed successfully.')
             return True
-        
         else:
-            # Log an error if the response isn't as expected
-            logger.error(f'Error processing data: {response_data}')
+            logger.error(f'Error processing data:{response}')
             return False
 
-    except Exception as e:
-        # Log any unexpected exceptions
-        logger.error(f'Error processing data: {e}')
+    except requests.exceptions.RequestException as e:
+        logger.error(f'Error sending data to API: {e}')
         return False
