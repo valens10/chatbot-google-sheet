@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-  #path('chatbot', views.photo_wall, name='photo-wall'),
+   #path('chatbot/user_data/', views.UserDataView.as_view(), name='user-data')
 ]
