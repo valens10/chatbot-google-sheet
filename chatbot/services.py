@@ -1,10 +1,14 @@
 import os
 import gspread
-from typing import List, Optional
+from typing import List, Optional, Dict
 import logging
 from gspread.exceptions import SpreadsheetNotFound
 from django.conf import settings
 
+
+# Configure the logger
+logger = logging.getLogger(__name__)
+BASE_URL = os.getenv("BASE_URL")
 def initialize_gspread() -> gspread.client.Client:
   """
   Initialize a gspread client with the given credentials.
@@ -29,7 +33,7 @@ def get_credentials() -> dict:
     "universe_domain": os.getenv("UNIVERSE_DOMAIN")
   }
 
-def get_all_rows(doc_name: str, sheet_name: Optional[str] = None) -> List[dict]:
+def fetch_data_from_google_sheet(doc_name: str, sheet_name: Optional[str] = None) -> List[dict]:
     """
     Fetches all rows from a given Google Sheet worksheet.
     Returns an empty list if an error occurs.
@@ -49,3 +53,27 @@ def get_all_rows(doc_name: str, sheet_name: Optional[str] = None) -> List[dict]:
     
     # Return an empty list if an error occurs
     return []
+
+def send_user_data_to_api(data: List[Dict]) -> bool:
+    """
+    Process a list of user data entries using the handle_user_data function.
+    Returns True if processing was successful, otherwise False.
+    """
+    try:
+        from chatbot.views import handle_user_data #Standalone
+        # Directly call handle_user_data and pass [Simulation of the request]
+        response_data = handle_user_data(data)
+
+        if isinstance(response_data, list):
+            logger.info('Data processed successfully.')
+            return True
+        
+        else:
+            # Log an error if the response isn't as expected
+            logger.error(f'Error processing data: {response_data}')
+            return False
+
+    except Exception as e:
+        # Log any unexpected exceptions
+        logger.error(f'Error processing data: {e}')
+        return False
