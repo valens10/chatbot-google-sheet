@@ -81,11 +81,11 @@ WSGI_APPLICATION = 'chatbot_simulation.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'db_chatbot',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5433', # leave blank if using default port
+        'NAME': os.getenv("BD_NAME"),
+        'USER': os.getenv("DB_USER"),
+        'PASSWORD': os.getenv("DB_PASS"),
+        'HOST': os.getenv("DB_HOST"),
+        'PORT': os.getenv("DB_PORT"), # leave blank if using default port
         'ATOMIC_REQUESTS': True,
     }
 }
