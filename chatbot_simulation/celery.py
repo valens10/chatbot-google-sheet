@@ -17,7 +17,7 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 
 # Setting up periodic task scheduling
 app.conf.beat_schedule = {
-    'sync_google_sheet_data_every_2_seconds': {
+    'sync_google_sheet_data_every_10_seconds': {
         'task': 'chatbot.tasks.sync_google_sheet_data',
         'schedule': timedelta(seconds=10),
         'args': (doc_name, sheet_name or ''),

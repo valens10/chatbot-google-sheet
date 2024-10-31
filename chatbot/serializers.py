@@ -13,6 +13,7 @@ class UserScoringSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserScoring
         fields = '__all__'
+        depth = 1
 
 
 def generate_random_scores():

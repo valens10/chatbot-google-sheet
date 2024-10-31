@@ -61,7 +61,7 @@ def send_user_data_to_api(data: List[Dict]) -> bool:
     """
     try:
         from chatbot.views import handle_user_data #Standalone
-        # Directly call handle_user_data and pass [Simulation of the request]
+        # Directly call handle_user_data and pass [Simulation of the request Mock API Request]
         response_data = handle_user_data(data)
 
         if isinstance(response_data, list):

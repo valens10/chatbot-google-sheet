@@ -1,8 +1,55 @@
 from .models import UserData, UserScoring 
+from rest_framework.response import Response
 from .serializers import UserDataSerializer, UserScoringSerializer, generate_random_scores
+from rest_framework.generics import GenericAPIView
+from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin, \
+    DestroyModelMixin, CreateModelMixin
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+class UserScoringList(GenericAPIView, ListModelMixin, CreateModelMixin):
+    serializer_class = UserScoringSerializer
+    queryset = UserScoring.objects.all()
+
+    def get_queryset(self):
+        queryset = UserScoring.objects.all()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+
+
+
+class UserScoringDetail(GenericAPIView, RetrieveModelMixin):
+    """
+    Retrieve scoring information for a specific user based on user ID.
+    """
+    serializer_class = UserScoringSerializer
+    queryset = UserScoring.objects.all()
+
+    def get_queryset(self):
+        return UserScoring.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        try:
+            # Check if UserData exists for the given user_id
+            user_data = UserData.objects.get(id=user_id)
+            user_scoring = self.get_queryset().get(user=user_data)
+            serializer = self.get_serializer(user_scoring)
+            return Response(serializer.data, status=200)
+        
+        except UserData.DoesNotExist:
+            return Response({'error': 'User data not found.'}, status=404)
+        
+        except UserScoring.DoesNotExist:
+            return Response({'error': 'User scoring data not found.'}, status=404)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+
 
 def handle_user_data(users_data):
     
@@ -32,7 +79,7 @@ def process_single_user_data(user_data, user_id=None):
             else:
                 return {"error": serializer.errors}
 
-        # Create a new user if no ID is provided or user not found
+        # Create a new user if not found
         serializer = UserDataSerializer(data=user_data)
         if serializer.is_valid():
             user = serializer.save(id=user_id if user_id else None)
