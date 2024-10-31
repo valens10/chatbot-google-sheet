@@ -121,3 +121,24 @@ Basics
 - **Enhanced Error Handling**: Add retries for failed API calls.
 - **Webhook Replacement**: Refine the Celery task frequency or explore webhook options for real-time data updates and post data back to the sheet.
 - **Enhanced packaging**: Enhance packaging with automation deployment and Docker for containerization.
+
+# Screenshots
+- Redis running to your system
+  ![image](https://github.com/user-attachments/assets/c7b64515-590e-4b98-bd82-c37ec298e130)
+- User data scoring list
+   ![image](https://github.com/user-attachments/assets/145914fc-e02d-4168-a025-bb11dc48cce6)
+  
+- Single-user scoring
+![image](https://github.com/user-attachments/assets/8c08ff7a-ba6c-433b-9356-05e784bdba66)
+
+- Google sheet template for user lifestyle and demographics
+  ![image](https://github.com/user-attachments/assets/7a9347e8-f737-4ebc-b9ee-79f4ed073975)
+
+- Terminal logs on local machine
+![image](https://github.com/user-attachments/assets/a0906031-e544-4873-b85e-7c827b7c92a8)
+
+
+
+
+
+
