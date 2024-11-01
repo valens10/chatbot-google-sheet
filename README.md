@@ -38,7 +38,7 @@ The project fulfills the following requirements:
 Basics
 - Clone the Project:
     ```bash
-     https://github.com/valens10/chatbot-google-sheet.git
+     git close https://github.com/valens10/chatbot-google-sheet.git
      cd chatbot-google-sheet
      git checkout develop
      ```
@@ -50,7 +50,13 @@ Basics
      ```
 
 1. **Environment Setup**
-   - Ensure you have Django, Django REST Framework, redis-server and Celery installed.
+   - Ensure you have Django, Django REST Framework, redis-server, postgres 13 or high and Celery installed.
+   - Create virtualenv and activate it
+      ```bash
+     virtualenv venv
+     ./venv/script/activate # on windows
+     source venv/bin/activate # on linux or mac
+     ```
    - Install dependencies:
      ```bash
      pip install -r requirements.txt
